@@ -91,4 +91,4 @@ gulp.task('demo', function() {
     }));
 });
 
-gulp.task('default', gulp.series(clean_dist, gulp.parallel(gulp.series([compile_js, gulp.parallel(concat_main_js, concat_frame_js), minify_js]), copy_css, copy_fonts)));
+// gulp.task('default', gulp.series(clean_dist, gulp.parallel(gulp.series([compile_js, gulp.parallel(concat_main_js, concat_frame_js), minify_js]), copy_css, copy_fonts)));
