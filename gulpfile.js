@@ -84,10 +84,12 @@ function copy_fonts() {
     .pipe(gulp.dest('dist/fonts'));
 };
 
-gulp.task('demo', function() {
+gulp.task('dev', function() {
   gulp.src('./')
     .pipe(webserver({
-      open: '/demo/'
+      port: 8000,
+      livereload: true,
+      open: './'
     }));
 });
 
