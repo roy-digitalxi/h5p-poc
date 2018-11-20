@@ -19,6 +19,14 @@
         });
       });
     })(H5P.jQuery);
+
+    // H5P listener
+    H5P.externalDispatcher.on('xAPI', function (event) {
+      // event.data.statement.actor.name="Roy He";
+      // event.data.statement.actor.mbox="mailto:roy@digitalxi.com";
+      console.log(event);
+    });
+
   </script>
 </head>
 
