@@ -5,9 +5,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="text/javascript" src="./dist/js/h5p-standalone-main.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
   <script type="text/javascript">
-    const host = `http://localhost:3000/h5p`;
+    const host = 'http://localhost:3000';
+    const apiKey = '80ac2e02-7bfc-4e56-bcfc-0d94a6b4f6eb';
+    const htpHost = `${host}/h5p`;
     // loading
     (function ($) {
       $(function () {
@@ -15,7 +18,7 @@
         $('.h5p-container').h5p({
           frameJs: './dist/js/h5p-standalone-frame.min.js',
           frameCss: './dist/styles/h5p.css',
-          h5pContent: `${host}/${sectionGUID}/`
+          h5pContent: `${htpHost}/${sectionGUID}`
         });
       });
     })(H5P.jQuery);
@@ -24,9 +27,22 @@
     H5P.externalDispatcher.on('xAPI', function (event) {
       // event.data.statement.actor.name="Roy He";
       // event.data.statement.actor.mbox="mailto:roy@digitalxi.com";
-      console.log(event);
+      const url = `${host}/xapi/create_statement`;
+      const params = {
+        Statement: event.data
+      };
+      const headers = {
+        'api-key': apiKey,
+        'Content-Type': 'application/json'
+      };
+      apiManager(url, params, headers)
+        .then((response) => {
+          console.log('response: ', response);
+        })
+        .catch((error) => {
+          console.log('error: ', error);
+        })
     });
-
   </script>
 </head>
 
@@ -48,6 +64,24 @@
         return sParameterName[1] === undefined ? true : sParameterName[1];
       }
     }
+  };
+
+  var apiManager = function apiManager(url, params, headers) {
+    return new Promise((resolve, reject) => {
+      axios
+        .create({
+          headers,
+        })
+        .post(url, params)
+        .then((response) => {
+          resolve(response);
+          return;
+        })
+        .catch((error) => {
+          reject(error);
+          return;
+        })
+    })
   };
 </script>
 
