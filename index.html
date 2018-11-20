@@ -25,11 +25,31 @@
 
     // H5P listener
     H5P.externalDispatcher.on('xAPI', function (event) {
-      // event.data.statement.actor.name="Roy He";
-      // event.data.statement.actor.mbox="mailto:roy@digitalxi.com";
+
+      const {
+        statement
+      } = event.data;
+      statement.actor.mbox = "mailto:devops@digitalxi.com";
+      delete(statement.actor.account);
+      let objectID = statement.object.id;
+      let subContentId;
+      if (objectID && objectID.includes('subContentId')) {
+        let index = objectID.indexOf('subContentId');
+        subContentId = objectID.substring(index);
+        statement.object.id = `https://www.publishxi.com?${subContentId}`;
+      } else {
+        statement.object.id = `https://www.publishxi.com`;
+      }
+      if (statement.context.contextActivities 
+        && statement.context.contextActivities.parent
+        && statement.context.contextActivities.parent.length) {
+        statement.context.contextActivities.parent[0].id = `https://www.publishxi.com`;
+      }
+
+      // Call API
       const url = `${host}/xapi/create_statement`;
       const params = {
-        Statement: event.data
+        Statement: statement
       };
       const headers = {
         'api-key': apiKey,
@@ -73,6 +93,7 @@
           headers,
         })
         .post(url, params)
+        .then(response => response.data)
         .then((response) => {
           resolve(response);
           return;
