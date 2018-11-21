@@ -14,11 +14,11 @@
     // loading
     (function ($) {
       $(function () {
-        let sectionGUID = getUrlParameter('sectionGUID');
+        let h5p = getUrlParameter('h5p');
         $('.h5p-container').h5p({
           frameJs: './dist/js/h5p-standalone-frame.min.js',
           frameCss: './dist/styles/h5p.css',
-          h5pContent: `${htpHost}/${sectionGUID}`
+          h5pContent: `${htpHost}/${h5p}`
         });
       });
     })(H5P.jQuery);
